@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:traak/constants/spacing.dart';
+import 'package:traak/features/track/track_screen.dart';
 import 'package:traak/theme.dart';
 
 class TraakApp extends StatelessWidget {
@@ -11,7 +13,7 @@ class TraakApp extends StatelessWidget {
       title: 'Traak',
       debugShowCheckedModeBanner: false,
       theme: darkTheme,
-      home: Scaffold(appBar: AppBar(), body: Placeholder()),
+      home: const TrackScreen(),
     );
   }
 }
