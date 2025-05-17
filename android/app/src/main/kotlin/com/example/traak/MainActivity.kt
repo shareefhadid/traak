@@ -1,4 +1,4 @@
-package com.example.traak
+package com.traakapp
 
 import io.flutter.embedding.android.FlutterActivity
 
