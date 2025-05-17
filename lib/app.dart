@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traak/theme.dart';
 
 class TraakApp extends StatelessWidget {
   const TraakApp({super.key});
@@ -8,10 +9,9 @@ class TraakApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Traak',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const Placeholder(),
+      debugShowCheckedModeBanner: false,
+      theme: darkTheme,
+      home: Scaffold(appBar: AppBar(), body: Placeholder()),
     );
   }
 }
