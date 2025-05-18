@@ -1,12 +1,21 @@
-import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
+import 'package:uuid/uuid.dart';
 
+part 'exercise.g.dart';
+
+@embedded
 class Exercise {
-  Exercise({required this.id});
-  final int id;
+  Exercise() {
+    // Generate a unique ID using UUID
+    uuid = const Uuid().v4();
+  }
+
+  // Persistent UUID for the exercise
+  String uuid = '';
+
+  // Core exercise data
   String name = '';
-  final TextEditingController distanceController = TextEditingController(
-    text: '60',
-  );
+  int distance = 60;
   double effort = 100;
   String startingPosition = 'Standing';
   int repCount = 1;

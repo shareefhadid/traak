@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:traak/constants/spacing.dart';
 import 'package:traak/features/track/models/exercise.dart';
+import 'package:traak/features/track/view_models/exercise_view_model.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
 
 class ExerciseItem extends StatefulWidget {
@@ -23,17 +24,17 @@ class ExerciseItem extends StatefulWidget {
 }
 
 class _ExerciseItemState extends State<ExerciseItem> {
-  final TextEditingController _repController = TextEditingController();
+  late final ExerciseViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-    _repController.text = widget.exercise.repCount.toString();
+    _viewModel = ExerciseViewModel(exercise: widget.exercise);
   }
 
   @override
   void dispose() {
-    _repController.dispose();
+    _viewModel.dispose();
     super.dispose();
   }
 
@@ -56,10 +57,12 @@ class _ExerciseItemState extends State<ExerciseItem> {
                 ),
                 if (widget.isRemovable)
                   IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: widget.onRemove,
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      widget.onRemove();
+                    },
                     tooltip: 'Remove exercise',
-                    color: Colors.red,
+                    color: ColorScheme.of(context).onSurfaceVariant,
                   ),
               ],
             ),
@@ -79,7 +82,7 @@ class _ExerciseItemState extends State<ExerciseItem> {
               },
             ),
             TextFormField(
-              controller: widget.exercise.distanceController,
+              controller: _viewModel.distanceController,
               decoration: const InputDecoration(
                 labelText: 'Distance (meters)',
                 hintText: 'Enter distance in meters',
@@ -97,6 +100,9 @@ class _ExerciseItemState extends State<ExerciseItem> {
                   return 'Distance must be greater than 0';
                 }
                 return null;
+              },
+              onEditingComplete: () {
+                _viewModel.save();
               },
             ),
             Column(
@@ -156,7 +162,7 @@ class _ExerciseItemState extends State<ExerciseItem> {
                 ),
                 const SizedBox(height: Spacing.xs),
                 TextFormField(
-                  controller: _repController,
+                  controller: _viewModel.repCountController,
                   readOnly: true,
                   enableInteractiveSelection: false,
                   decoration: InputDecoration(
@@ -184,9 +190,9 @@ class _ExerciseItemState extends State<ExerciseItem> {
                           widget.exercise.repCount > 1
                               ? () {
                                 setState(() {
-                                  widget.exercise.repCount--;
-                                  _repController.text =
-                                      widget.exercise.repCount.toString();
+                                  _viewModel.updateRepCount(
+                                    widget.exercise.repCount - 1,
+                                  );
                                 });
                               }
                               : null,
@@ -196,9 +202,9 @@ class _ExerciseItemState extends State<ExerciseItem> {
                       icon: const Icon(Icons.add),
                       onPressed: () {
                         setState(() {
-                          widget.exercise.repCount++;
-                          _repController.text =
-                              widget.exercise.repCount.toString();
+                          _viewModel.updateRepCount(
+                            widget.exercise.repCount + 1,
+                          );
                         });
                       },
                       tooltip: 'Increase reps',

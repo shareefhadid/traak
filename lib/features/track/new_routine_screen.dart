@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:traak/constants/spacing.dart';
 import 'package:traak/features/track/components/exercise_item.dart';
 import 'package:traak/features/track/models/exercise.dart';
+import 'package:traak/features/track/models/routine.dart';
+import 'package:traak/features/track/repositories/routine_repository.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
 import 'package:traak/shared/components/custom_app_bar.dart';
 
@@ -15,10 +18,11 @@ class NewRoutineScreen extends StatefulWidget {
 class _NewRoutineScreenState extends State<NewRoutineScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
+  final _routineRepository = RoutineRepository.instance;
 
   String _selectedType = 'Acceleration';
 
-  final List<Exercise> _exercises = [Exercise(id: 0)];
+  final List<Exercise> _exercises = [Exercise()];
 
   final List<String> _routineTypes = [
     'Acceleration',
@@ -41,47 +45,47 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    for (final exercise in _exercises) {
-      exercise.distanceController.dispose();
-    }
     super.dispose();
   }
 
   void _addExercise() {
     setState(() {
-      _exercises.add(
-        Exercise(id: _exercises.isEmpty ? 0 : _exercises.last.id + 1),
-      );
+      _exercises.add(Exercise());
     });
   }
 
-  void _removeExercise(int index) {
+  void _removeExercise(String exerciseId) {
     if (_exercises.length > 1) {
       setState(() {
-        _exercises.removeAt(index);
+        _exercises.removeWhere((exercise) => exercise.uuid == exerciseId);
       });
     }
   }
 
-  void _saveRoutine() {
+  Future<void> _saveRoutine() async {
     if (_formKey.currentState!.validate()) {
-      // Here you would save the routine to your database
-      // For now, we just print the data
-      debugPrint('Routine name: ${_nameController.text}');
-      debugPrint('Type: $_selectedType');
-      debugPrint('Exercises: ${_exercises.length}');
+      try {
+        // Create routine object
+        final routine =
+            Routine()
+              ..name = _nameController.text
+              ..type = _selectedType
+              ..exercises = _exercises;
 
-      for (final exercise in _exercises) {
-        debugPrint('Exercise: ${exercise.name}');
-        debugPrint('Distance: ${exercise.distanceController.text}');
-        debugPrint('Effort: ${exercise.effort}%');
-        debugPrint('Starting position: ${exercise.startingPosition}');
-        debugPrint('Reps: ${exercise.repCount}');
+        // Save to database
+        await _routineRepository.saveRoutine(routine);
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Routine saved successfully')),
+        );
+
+        context.go('/');
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error saving routine: $e')));
       }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Routine saved successfully')),
-      );
     }
   }
 
@@ -148,10 +152,12 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
                       padding: EdgeInsets.zero,
                       itemCount: _exercises.length,
                       itemBuilder: (context, exerciseIndex) {
+                        final exercise = _exercises[exerciseIndex];
                         return ExerciseItem(
-                          exercise: _exercises[exerciseIndex],
+                          key: ValueKey(exercise.uuid),
+                          exercise: exercise,
                           exerciseIndex: exerciseIndex,
-                          onRemove: () => _removeExercise(exerciseIndex),
+                          onRemove: () => _removeExercise(exercise.uuid),
                           isRemovable: _exercises.length > 1,
                           startingPositions: _startingPositions,
                         );
