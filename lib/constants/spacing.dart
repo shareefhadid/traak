@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 
 @immutable
 class Spacing {
+  const Spacing._();
+
   /// 0.0
   static const double zero = 0.0;
 

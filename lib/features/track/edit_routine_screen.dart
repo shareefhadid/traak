@@ -10,21 +10,62 @@ import 'package:traak/features/track/types/starting_position.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
 import 'package:traak/shared/components/custom_app_bar.dart';
 
-class NewRoutineScreen extends StatefulWidget {
-  const NewRoutineScreen({super.key});
+class EditRoutineScreen extends StatefulWidget {
+  const EditRoutineScreen({required this.routineId, super.key});
+  final int routineId;
 
   @override
-  State<NewRoutineScreen> createState() => _NewRoutineScreenState();
+  State<EditRoutineScreen> createState() => _EditRoutineScreenState();
 }
 
-class _NewRoutineScreenState extends State<NewRoutineScreen> {
+class _EditRoutineScreenState extends State<EditRoutineScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
+  late final TextEditingController _nameController;
   final _routineRepository = RoutineRepository.instance;
 
-  RoutineType _selectedType = RoutineType.acceleration;
+  late RoutineType _selectedType;
+  late List<Exercise> _exercises;
+  Routine? _originalRoutine;
+  bool _isLoading = true;
 
-  final List<Exercise> _exercises = [Exercise()];
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _selectedType = RoutineType.acceleration;
+    _exercises = [];
+    _loadRoutine();
+  }
+
+  Future<void> _loadRoutine() async {
+    try {
+      final routine = await _routineRepository.getRoutineById(widget.routineId);
+      if (routine == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Routine not found')));
+          context.go('/');
+        }
+        return;
+      }
+
+      setState(() {
+        _originalRoutine = routine;
+        _nameController.text = routine.name;
+        _selectedType = routine.type;
+        _exercises = List.from(routine.exercises);
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error loading routine: $e')));
+        context.go('/');
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -49,9 +90,9 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
   Future<void> _saveRoutine() async {
     if (_formKey.currentState!.validate()) {
       try {
-        // Create routine object
+        // Update routine object
         final routine =
-            Routine()
+            _originalRoutine!
               ..name = _nameController.text
               ..type = _selectedType
               ..exercises = _exercises;
@@ -61,22 +102,29 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Routine saved successfully')),
+          const SnackBar(content: Text('Routine updated successfully')),
         );
 
         context.go('/');
       } catch (e) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Error saving routine: $e')));
+        ).showSnackBar(SnackBar(content: Text('Error updating routine: $e')));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        appBar: CustomAppBar(title: 'Edit Routine'),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
-      appBar: const CustomAppBar(title: 'New Routine'),
+      appBar: const CustomAppBar(title: 'Edit Routine'),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -121,7 +169,6 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
                 const SizedBox(height: Spacing.xl4),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: Spacing.sm,
                   children: [
                     const Text(
                       'Exercises',
@@ -130,6 +177,7 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(height: Spacing.sm),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -165,7 +213,7 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(Spacing.md),
                     ),
-                    child: const Text('Save Routine'),
+                    child: const Text('Save Changes'),
                   ),
                 ),
               ],

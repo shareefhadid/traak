@@ -1,5 +1,6 @@
 import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
+import 'package:traak/features/track/types/starting_position.dart';
 
 part 'exercise.g.dart';
 
@@ -17,6 +18,9 @@ class Exercise {
   String name = '';
   int distance = 60;
   double effort = 100;
-  String startingPosition = 'Standing';
+
+  @Enumerated(EnumType.name)
+  StartingPosition startingPosition = StartingPosition.block;
+
   int repCount = 1;
 }

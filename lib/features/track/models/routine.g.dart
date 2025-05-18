@@ -47,6 +47,7 @@ const RoutineSchema = CollectionSchema(
       id: 5,
       name: r'type',
       type: IsarType.string,
+      enumMap: _RoutinetypeEnumValueMap,
     ),
     r'typeIndex': PropertySchema(
       id: 6,
@@ -111,7 +112,7 @@ int _routineEstimateSize(
   }
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.nameIndex.length * 3;
-  bytesCount += 3 + object.type.length * 3;
+  bytesCount += 3 + object.type.name.length * 3;
   bytesCount += 3 + object.typeIndex.length * 3;
   return bytesCount;
 }
@@ -132,7 +133,7 @@ void _routineSerialize(
   );
   writer.writeString(offsets[3], object.name);
   writer.writeString(offsets[4], object.nameIndex);
-  writer.writeString(offsets[5], object.type);
+  writer.writeString(offsets[5], object.type.name);
   writer.writeString(offsets[6], object.typeIndex);
 }
 
@@ -153,7 +154,8 @@ Routine _routineDeserialize(
       [];
   object.id = id;
   object.name = reader.readString(offsets[3]);
-  object.type = reader.readString(offsets[5]);
+  object.type = _RoutinetypeValueEnumMap[reader.readStringOrNull(offsets[5])] ??
+      RoutineType.acceleration;
   return object;
 }
 
@@ -181,13 +183,31 @@ P _routineDeserializeProp<P>(
     case 4:
       return (reader.readString(offset)) as P;
     case 5:
-      return (reader.readString(offset)) as P;
+      return (_RoutinetypeValueEnumMap[reader.readStringOrNull(offset)] ??
+          RoutineType.acceleration) as P;
     case 6:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _RoutinetypeEnumValueMap = {
+  r'acceleration': r'acceleration',
+  r'maxVelocity': r'maxVelocity',
+  r'speedEndurance': r'speedEndurance',
+  r'specialEndurance': r'specialEndurance',
+  r'technicalDrills': r'technicalDrills',
+  r'tempo': r'tempo',
+};
+const _RoutinetypeValueEnumMap = {
+  r'acceleration': RoutineType.acceleration,
+  r'maxVelocity': RoutineType.maxVelocity,
+  r'speedEndurance': RoutineType.speedEndurance,
+  r'specialEndurance': RoutineType.specialEndurance,
+  r'technicalDrills': RoutineType.technicalDrills,
+  r'tempo': RoutineType.tempo,
+};
 
 Id _routineGetId(Routine object) {
   return object.id;
@@ -873,7 +893,7 @@ extension RoutineQueryFilter
   }
 
   QueryBuilder<Routine, Routine, QAfterFilterCondition> typeEqualTo(
-    String value, {
+    RoutineType value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -886,7 +906,7 @@ extension RoutineQueryFilter
   }
 
   QueryBuilder<Routine, Routine, QAfterFilterCondition> typeGreaterThan(
-    String value, {
+    RoutineType value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -901,7 +921,7 @@ extension RoutineQueryFilter
   }
 
   QueryBuilder<Routine, Routine, QAfterFilterCondition> typeLessThan(
-    String value, {
+    RoutineType value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -916,8 +936,8 @@ extension RoutineQueryFilter
   }
 
   QueryBuilder<Routine, Routine, QAfterFilterCondition> typeBetween(
-    String lower,
-    String upper, {
+    RoutineType lower,
+    RoutineType upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -1388,7 +1408,7 @@ extension RoutineQueryProperty
     });
   }
 
-  QueryBuilder<Routine, String, QQueryOperations> typeProperty() {
+  QueryBuilder<Routine, RoutineType, QQueryOperations> typeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'type');
     });

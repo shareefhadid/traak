@@ -1,16 +1,18 @@
 import 'package:isar/isar.dart';
 import 'package:traak/features/track/models/exercise.dart';
+import 'package:traak/features/track/types/routine_type.dart';
 
 part 'routine.g.dart';
 
 @collection
 class Routine {
-
   Routine();
   Id id = Isar.autoIncrement;
 
   String name = '';
-  String type = 'Acceleration';
+
+  @Enumerated(EnumType.name)
+  RoutineType type = RoutineType.acceleration;
 
   List<Exercise> exercises = [];
 
@@ -23,5 +25,5 @@ class Routine {
   String get nameIndex => name.toLowerCase();
 
   @Index()
-  String get typeIndex => type.toLowerCase();
+  String get typeIndex => type.toString().toLowerCase();
 }

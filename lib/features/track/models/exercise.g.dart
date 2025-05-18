@@ -37,6 +37,7 @@ const ExerciseSchema = Schema(
       id: 4,
       name: r'startingPosition',
       type: IsarType.string,
+      enumMap: _ExercisestartingPositionEnumValueMap,
     ),
     r'uuid': PropertySchema(
       id: 5,
@@ -57,7 +58,7 @@ int _exerciseEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.name.length * 3;
-  bytesCount += 3 + object.startingPosition.length * 3;
+  bytesCount += 3 + object.startingPosition.name.length * 3;
   bytesCount += 3 + object.uuid.length * 3;
   return bytesCount;
 }
@@ -72,7 +73,7 @@ void _exerciseSerialize(
   writer.writeDouble(offsets[1], object.effort);
   writer.writeString(offsets[2], object.name);
   writer.writeLong(offsets[3], object.repCount);
-  writer.writeString(offsets[4], object.startingPosition);
+  writer.writeString(offsets[4], object.startingPosition.name);
   writer.writeString(offsets[5], object.uuid);
 }
 
@@ -87,7 +88,9 @@ Exercise _exerciseDeserialize(
   object.effort = reader.readDouble(offsets[1]);
   object.name = reader.readString(offsets[2]);
   object.repCount = reader.readLong(offsets[3]);
-  object.startingPosition = reader.readString(offsets[4]);
+  object.startingPosition = _ExercisestartingPositionValueEnumMap[
+          reader.readStringOrNull(offsets[4])] ??
+      StartingPosition.twoPoint;
   object.uuid = reader.readString(offsets[5]);
   return object;
 }
@@ -108,13 +111,32 @@ P _exerciseDeserializeProp<P>(
     case 3:
       return (reader.readLong(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
+      return (_ExercisestartingPositionValueEnumMap[
+              reader.readStringOrNull(offset)] ??
+          StartingPosition.twoPoint) as P;
     case 5:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _ExercisestartingPositionEnumValueMap = {
+  r'twoPoint': r'twoPoint',
+  r'threePoint': r'threePoint',
+  r'fourPoint': r'fourPoint',
+  r'block': r'block',
+  r'dropIn': r'dropIn',
+  r'flying': r'flying',
+};
+const _ExercisestartingPositionValueEnumMap = {
+  r'twoPoint': StartingPosition.twoPoint,
+  r'threePoint': StartingPosition.threePoint,
+  r'fourPoint': StartingPosition.fourPoint,
+  r'block': StartingPosition.block,
+  r'dropIn': StartingPosition.dropIn,
+  r'flying': StartingPosition.flying,
+};
 
 extension ExerciseQueryFilter
     on QueryBuilder<Exercise, Exercise, QFilterCondition> {
@@ -418,7 +440,7 @@ extension ExerciseQueryFilter
 
   QueryBuilder<Exercise, Exercise, QAfterFilterCondition>
       startingPositionEqualTo(
-    String value, {
+    StartingPosition value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -432,7 +454,7 @@ extension ExerciseQueryFilter
 
   QueryBuilder<Exercise, Exercise, QAfterFilterCondition>
       startingPositionGreaterThan(
-    String value, {
+    StartingPosition value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -448,7 +470,7 @@ extension ExerciseQueryFilter
 
   QueryBuilder<Exercise, Exercise, QAfterFilterCondition>
       startingPositionLessThan(
-    String value, {
+    StartingPosition value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -464,8 +486,8 @@ extension ExerciseQueryFilter
 
   QueryBuilder<Exercise, Exercise, QAfterFilterCondition>
       startingPositionBetween(
-    String lower,
-    String upper, {
+    StartingPosition lower,
+    StartingPosition upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,

@@ -5,6 +5,7 @@ import 'package:traak/features/track/models/exercise.dart';
 class ExerciseViewModel {
   ExerciseViewModel({required this.exercise}) {
     // Initialize controllers with current model values
+    nameController = TextEditingController(text: exercise.name);
     distanceController = TextEditingController(
       text: exercise.distance.toString(),
     );
@@ -16,6 +17,9 @@ class ExerciseViewModel {
   /// The underlying exercise model
   final Exercise exercise;
 
+  /// Controller for the name field
+  late final TextEditingController nameController;
+
   /// Controller for the distance field
   late final TextEditingController distanceController;
 
@@ -24,6 +28,9 @@ class ExerciseViewModel {
 
   /// Updates the exercise model with current controller values
   void save() {
+    // Update exercise name
+    exercise.name = nameController.text;
+
     // Parse distance
     final distanceValue = int.tryParse(distanceController.text);
     if (distanceValue == null) {
@@ -55,6 +62,7 @@ class ExerciseViewModel {
 
   /// Clean up resources
   void dispose() {
+    nameController.dispose();
     distanceController.dispose();
     repCountController.dispose();
   }

@@ -4,6 +4,7 @@ import 'package:traak/constants/spacing.dart';
 import 'package:traak/features/track/components/track_screen_empty_state.dart';
 import 'package:traak/features/track/models/routine.dart';
 import 'package:traak/features/track/repositories/routine_repository.dart';
+import 'package:traak/features/track/types/routine_type.dart';
 import 'package:traak/shared/components/custom_app_bar.dart';
 
 class TrackScreen extends StatefulWidget {
@@ -75,15 +76,41 @@ class _TrackScreenState extends State<TrackScreen> {
                   child: ListTile(
                     title: Text(routine.name),
                     subtitle: Text(
-                      '${routine.type} • ${routine.exerciseCount} exercises',
+                      '${routine.type.displayName} • ${routine.exerciseCount} exercises',
                     ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => _deleteRoutine(routine.id),
+                    trailing: PopupMenuButton<String>(
+                      icon: const Icon(Icons.more_horiz),
+                      onSelected: (value) {
+                        if (value == 'edit') {
+                          context.push('/edit-routine/${routine.id}');
+                        } else if (value == 'delete') {
+                          _deleteRoutine(routine.id);
+                        }
+                      },
+                      itemBuilder:
+                          (context) => [
+                            const PopupMenuItem(
+                              value: 'edit',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.edit, size: 20),
+                                  SizedBox(width: 8),
+                                  Text('Edit'),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem(
+                              value: 'delete',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.delete, size: 20),
+                                  SizedBox(width: 8),
+                                  Text('Delete'),
+                                ],
+                              ),
+                            ),
+                          ],
                     ),
-                    onTap: () {
-                      // TODO: Navigate to routine detail
-                    },
                   ),
                 );
               },

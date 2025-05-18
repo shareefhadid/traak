@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:traak/constants/spacing.dart';
 import 'package:traak/features/track/models/exercise.dart';
+import 'package:traak/features/track/types/starting_position.dart';
 import 'package:traak/features/track/view_models/exercise_view_model.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
 
@@ -38,6 +39,17 @@ class _ExerciseItemState extends State<ExerciseItem> {
     super.dispose();
   }
 
+  StartingPosition _getPositionFromDisplayName(String displayName) {
+    return StartingPosition.values.firstWhere(
+      (pos) => pos.displayName == displayName,
+      orElse: () => StartingPosition.block,
+    );
+  }
+
+  String get _currentStartingPositionDisplayName {
+    return widget.exercise.startingPosition.displayName;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -67,12 +79,13 @@ class _ExerciseItemState extends State<ExerciseItem> {
               ],
             ),
             TextFormField(
+              controller: _viewModel.nameController,
               decoration: const InputDecoration(
                 labelText: 'Exercise Name',
                 hintText: 'E.g., Sprint, Skips, Bounds',
               ),
               onChanged: (value) {
-                widget.exercise.name = value;
+                _viewModel.save();
               },
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
@@ -89,6 +102,9 @@ class _ExerciseItemState extends State<ExerciseItem> {
                 suffixText: 'm',
               ),
               keyboardType: TextInputType.number,
+              onChanged: (value) {
+                _viewModel.save();
+              },
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return 'Please enter a distance';
@@ -133,7 +149,7 @@ class _ExerciseItemState extends State<ExerciseItem> {
               ],
             ),
             DropdownButtonFormField<String>(
-              value: widget.exercise.startingPosition,
+              value: _currentStartingPositionDisplayName,
               decoration: const InputDecoration(labelText: 'Starting Position'),
               items:
                   widget.startingPositions.map((String position) {
@@ -145,7 +161,8 @@ class _ExerciseItemState extends State<ExerciseItem> {
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   setState(() {
-                    widget.exercise.startingPosition = newValue;
+                    widget.exercise.startingPosition =
+                        _getPositionFromDisplayName(newValue);
                   });
                 }
               },
