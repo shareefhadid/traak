@@ -1,14 +1,17 @@
+# TODO
+
+- bundle package and send to douglas
+
 ## Tracking
 
-- empty state
-- add routine
 - edit routine
-- delete routine
+- start workout
 
 ## History
 
 - empty state
 - edit workout
+- delete workout
 
 ## Insights
 
