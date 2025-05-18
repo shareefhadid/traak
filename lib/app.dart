@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:traak/constants/spacing.dart';
-import 'package:traak/features/track/track_screen.dart';
+import 'package:traak/router.dart';
 import 'package:traak/theme.dart';
 
 class TraakApp extends StatelessWidget {
@@ -9,11 +8,11 @@ class TraakApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Traak',
       debugShowCheckedModeBanner: false,
       theme: darkTheme,
-      home: const TrackScreen(),
+      routerConfig: router,
     );
   }
 }

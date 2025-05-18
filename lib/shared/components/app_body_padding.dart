@@ -8,21 +8,6 @@ import 'package:traak/constants/spacing.dart';
 /// * Using the `vertical` constructor will only set top and bottom padding.
 /// * Using the `horizontal` constructor will only set the left and right padding.
 class AppBodyPadding extends StatelessWidget {
-  /// The child widget to add padding to.
-  final Widget child;
-
-  /// Overrides the padding on the top side of the child widget.
-  final double? topOverride;
-
-  /// Overrides the padding on the bottom side of the child widget.
-  final double? bottomOverride;
-
-  /// Overrides the padding on the left side of the child widget.
-  final double? leftOverride;
-
-  /// Overrides the padding on the right side of the child widget.
-  final double? rightOverride;
-
   /// Creates an [AppBodyPadding] widget.
   ///
   /// The `topOverride`, `bottomOverride`, `leftOverride`, and `rightOverride` parameters
@@ -64,6 +49,21 @@ class AppBodyPadding extends StatelessWidget {
     required this.child,
   }) : topOverride = 0.0,
        bottomOverride = 0.0;
+
+  /// The child widget to add padding to.
+  final Widget child;
+
+  /// Overrides the padding on the top side of the child widget.
+  final double? topOverride;
+
+  /// Overrides the padding on the bottom side of the child widget.
+  final double? bottomOverride;
+
+  /// Overrides the padding on the left side of the child widget.
+  final double? leftOverride;
+
+  /// Overrides the padding on the right side of the child widget.
+  final double? rightOverride;
 
   @override
   Widget build(BuildContext context) {
