@@ -27,19 +27,19 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
   final List<String> _routineTypes = [
     'Acceleration',
     'Max Velocity',
+    'Speed Endurance',
+    'Special Endurance',
+    'Technical drills',
     'Tempo',
-    'Endurance',
-    'Recovery',
-    'Technique',
   ];
 
   final List<String> _startingPositions = [
-    'Standing',
-    'Block',
+    'Two-point',
     'Three-point',
     'Four-point',
-    'Seated',
-    'Lying',
+    'Block',
+    'Drop-in',
+    'Flying',
   ];
 
   @override
