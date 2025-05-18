@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:traak/app.dart';
 import 'package:traak/features/track/repositories/routine_repository.dart';
-import 'package:traak/services/isar_service.dart';
+import 'package:traak/shared/services/isar_service.dart';
 
 void main() async {
   // Ensure Flutter is initialized

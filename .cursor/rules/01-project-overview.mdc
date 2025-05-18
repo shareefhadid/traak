@@ -1,0 +1,20 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Traak - Project Overview
+
+This is a Flutter application that helps users track routines and activities.
+
+## Main Entry Points
+- [lib/main.dart](mdc:lib/main.dart) - Application entry point that initializes services and launches the app
+- [lib/app.dart](mdc:lib/app.dart) - Root app widget that sets up theming and routing
+- [lib/router.dart](mdc:lib/router.dart) - Routing configuration using go_router
+- [lib/theme.dart](mdc:lib/theme.dart) - Theme configuration for the app
+
+## Project Structure
+The codebase follows a feature-first organization:
+- `lib/features/` - Contains feature modules with their screens, models, and logic
+- `lib/shared/` - Shared logic used across features
+- `lib/constants/` - Constants and configuration values
