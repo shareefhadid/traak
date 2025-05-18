@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:traak/features/track/models/rep.dart';
 
 class Exercise {
   Exercise({required this.id});
@@ -10,5 +9,5 @@ class Exercise {
   );
   double effort = 100;
   String startingPosition = 'Standing';
-  List<Rep> reps = [Rep(id: 0)];
+  int repCount = 1;
 }

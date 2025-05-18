@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:traak/constants/spacing.dart';
 import 'package:traak/features/track/components/exercise_item.dart';
 import 'package:traak/features/track/models/exercise.dart';
-import 'package:traak/features/track/models/rep.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
 import 'package:traak/shared/components/custom_app_bar.dart';
 
@@ -19,7 +18,6 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
 
   String _selectedType = 'Acceleration';
 
-  // List of exercises, each with its own list of reps
   final List<Exercise> _exercises = [Exercise(id: 0)];
 
   final List<String> _routineTypes = [
@@ -65,22 +63,6 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
     }
   }
 
-  void _addRep(int exerciseIndex) {
-    setState(() {
-      _exercises[exerciseIndex].reps.add(
-        Rep(id: _exercises[exerciseIndex].reps.last.id + 1),
-      );
-    });
-  }
-
-  void _removeRep(int exerciseIndex, int repIndex) {
-    if (_exercises[exerciseIndex].reps.length > 1) {
-      setState(() {
-        _exercises[exerciseIndex].reps.removeAt(repIndex);
-      });
-    }
-  }
-
   void _saveRoutine() {
     if (_formKey.currentState!.validate()) {
       // Here you would save the routine to your database
@@ -94,7 +76,7 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
         debugPrint('Distance: ${exercise.distanceController.text}');
         debugPrint('Effort: ${exercise.effort}%');
         debugPrint('Starting position: ${exercise.startingPosition}');
-        debugPrint('Reps: ${exercise.reps.length}');
+        debugPrint('Reps: ${exercise.repCount}');
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -114,7 +96,6 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
             bottomOverride: Spacing.xl5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: Spacing.xl,
               children: [
                 // Routine Name
                 TextFormField(
@@ -130,6 +111,7 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
                     return null;
                   },
                 ),
+                const SizedBox(height: Spacing.xl),
                 DropdownButtonFormField<String>(
                   value: _selectedType,
                   decoration: const InputDecoration(labelText: 'Routine Type'),
@@ -148,26 +130,28 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
                     }
                   },
                 ),
-                const SizedBox(height: Spacing.xs),
-                const Text(
-                  'Exercises',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const SizedBox(height: Spacing.xl4),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: Spacing.sm,
                   children: [
+                    const Text(
+                      'Exercises',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
                       itemCount: _exercises.length,
                       itemBuilder: (context, exerciseIndex) {
                         return ExerciseItem(
                           exercise: _exercises[exerciseIndex],
                           exerciseIndex: exerciseIndex,
                           onRemove: () => _removeExercise(exerciseIndex),
-                          onAddRep: () => _addRep(exerciseIndex),
-                          onRemoveRep:
-                              (repIndex) => _removeRep(exerciseIndex, repIndex),
                           isRemovable: _exercises.length > 1,
                           startingPositions: _startingPositions,
                         );
@@ -180,6 +164,7 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: Spacing.xl),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

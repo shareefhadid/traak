@@ -9,16 +9,12 @@ class ExerciseItem extends StatefulWidget {
     required this.exercise,
     required this.exerciseIndex,
     required this.onRemove,
-    required this.onAddRep,
-    required this.onRemoveRep,
     required this.isRemovable,
     required this.startingPositions,
   });
   final Exercise exercise;
   final int exerciseIndex;
   final VoidCallback onRemove;
-  final VoidCallback onAddRep;
-  final Function(int) onRemoveRep;
   final bool isRemovable;
   final List<String> startingPositions;
 
@@ -27,6 +23,20 @@ class ExerciseItem extends StatefulWidget {
 }
 
 class _ExerciseItemState extends State<ExerciseItem> {
+  final TextEditingController _repController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _repController.text = widget.exercise.repCount.toString();
+  }
+
+  @override
+  void dispose() {
+    _repController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -134,50 +144,85 @@ class _ExerciseItemState extends State<ExerciseItem> {
                 }
               },
             ),
-            Text(
-              'Reps (${widget.exercise.reps.length})',
-              style: const TextStyle(fontWeight: FontWeight.w500),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: widget.exercise.reps.length,
-              itemBuilder: (context, repIndex) {
-                return Card(
-                  color: ColorScheme.of(context).surfaceContainerHighest,
-                  margin: const EdgeInsets.symmetric(vertical: Spacing.xs),
-                  child: AppBodyPadding.horizontal(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Rep ${repIndex + 1} Notes',
-                              hintText: 'Optional notes',
-                              border: InputBorder.none,
-                            ),
-                            onChanged: (value) {
-                              widget.exercise.reps[repIndex].notes = value;
-                            },
-                          ),
-                        ),
-                        if (widget.exercise.reps.length > 1)
-                          IconButton(
-                            icon: const Icon(Icons.remove_circle),
-                            onPressed: () => widget.onRemoveRep(repIndex),
-                            tooltip: 'Remove rep',
-                            color: Colors.red,
-                          ),
-                      ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Repetitions',
+                  style: TextStyle(
+                    fontSize: TextTheme.of(context).bodySmall?.fontSize,
+                    color: ColorScheme.of(context).onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: Spacing.xs),
+                TextFormField(
+                  controller: _repController,
+                  readOnly: true,
+                  enableInteractiveSelection: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: ColorScheme.of(context).outlineVariant,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: ColorScheme.of(context).outlineVariant,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    contentPadding: EdgeInsets.zero,
+                    prefixIcon: IconButton(
+                      icon: const Icon(Icons.remove),
+                      onPressed:
+                          widget.exercise.repCount > 1
+                              ? () {
+                                setState(() {
+                                  widget.exercise.repCount--;
+                                  _repController.text =
+                                      widget.exercise.repCount.toString();
+                                });
+                              }
+                              : null,
+                      tooltip: 'Decrease reps',
+                    ),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        setState(() {
+                          widget.exercise.repCount++;
+                          _repController.text =
+                              widget.exercise.repCount.toString();
+                        });
+                      },
+                      tooltip: 'Increase reps',
                     ),
                   ),
-                );
-              },
-            ),
-            TextButton.icon(
-              onPressed: widget.onAddRep,
-              icon: const Icon(Icons.add),
-              label: const Text('Add Rep'),
+                  textAlign: TextAlign.center,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter number of reps';
+                    }
+                    if (int.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    if (int.parse(value) <= 0) {
+                      return 'Rep count must be at least 1';
+                    }
+                    return null;
+                  },
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
