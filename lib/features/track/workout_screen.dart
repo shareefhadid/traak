@@ -383,56 +383,61 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           ),
         ],
       ),
-      body: AppBodyPadding(
-        child: Column(
-          children: [
-            ExerciseInfoCard(exercise: exercise, currentRepNumber: _repNumber),
-            const SizedBox(height: Spacing.xl),
-            TimeInputField(controller: _timeController),
-            const Spacer(),
-            Row(
-              children: [
-                Expanded(
-                  child:
-                      _canGoPrevious
-                          ? ElevatedButton(
-                            onPressed: _previousRep,
-                            child: Text(
-                              comingFromPreviousSet
-                                  ? 'Previous set'
-                                  : 'Previous rep',
+      body: SafeArea(
+        child: AppBodyPadding(
+          child: Column(
+            children: [
+              ExerciseInfoCard(
+                exercise: exercise,
+                currentRepNumber: _repNumber,
+              ),
+              const SizedBox(height: Spacing.xl),
+              TimeInputField(controller: _timeController),
+              const Spacer(),
+              Row(
+                children: [
+                  Expanded(
+                    child:
+                        _canGoPrevious
+                            ? ElevatedButton(
+                              onPressed: _previousRep,
+                              child: Text(
+                                comingFromPreviousSet
+                                    ? 'Previous set'
+                                    : 'Previous rep',
+                              ),
+                            )
+                            : ElevatedButton(
+                              onPressed: _cancelWorkout,
+                              child: const Text('Cancel workout'),
                             ),
-                          )
-                          : ElevatedButton(
-                            onPressed: _cancelWorkout,
-                            child: const Text('Cancel workout'),
-                          ),
-                ),
-                const SizedBox(width: Spacing.md),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed:
-                        isLastRepOfWorkout
-                            ? () {
-                              // For the last rep, first validate and save it, then complete
-                              if (_validateAndSaveCurrentRep()) {
-                                _saveAndCompleteWorkout();
+                  ),
+                  const SizedBox(width: Spacing.md),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed:
+                          isLastRepOfWorkout
+                              ? () {
+                                // For the last rep, first validate and save it, then complete
+                                if (_validateAndSaveCurrentRep()) {
+                                  _saveAndCompleteWorkout();
+                                }
                               }
-                            }
-                            : _nextRep,
-                    child: Text(
-                      isLastRepOfWorkout
-                          ? 'Complete workout'
-                          : goingToNextSet
-                          ? 'Next set'
-                          : 'Next rep',
+                              : _nextRep,
+                      child: Text(
+                        isLastRepOfWorkout
+                            ? 'Complete workout'
+                            : goingToNextSet
+                            ? 'Next set'
+                            : 'Next rep',
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: Spacing.md),
-          ],
+                ],
+              ),
+              const SizedBox(height: Spacing.md),
+            ],
+          ),
         ),
       ),
     );

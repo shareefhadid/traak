@@ -130,98 +130,102 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
           IconButton(icon: const Icon(Icons.save), onPressed: _saveRoutine),
         ],
       ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: AppBodyPadding(
-            bottomOverride: Spacing.xl5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Routine Name
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Routine Name',
-                    hintText: 'Enter routine name',
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: AppBodyPadding(
+              bottomOverride: Spacing.xl5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Routine Name
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Routine Name',
+                      hintText: 'Enter routine name',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please enter a routine name';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a routine name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: Spacing.xl),
-                DropdownButtonFormField<RoutineType>(
-                  value: _selectedType,
-                  decoration: const InputDecoration(labelText: 'Routine Type'),
-                  items:
-                      RoutineType.values.map((RoutineType type) {
-                        return DropdownMenuItem<RoutineType>(
-                          value: type,
-                          child: Text(type.displayName),
-                        );
-                      }).toList(),
-                  onChanged: (RoutineType? newValue) {
-                    if (newValue != null) {
-                      setState(() {
-                        _selectedType = newValue;
-                      });
-                    }
-                  },
-                ),
-                const SizedBox(height: Spacing.xl4),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Exercises',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                  const SizedBox(height: Spacing.xl),
+                  DropdownButtonFormField<RoutineType>(
+                    value: _selectedType,
+                    decoration: const InputDecoration(
+                      labelText: 'Routine Type',
+                    ),
+                    items:
+                        RoutineType.values.map((RoutineType type) {
+                          return DropdownMenuItem<RoutineType>(
+                            value: type,
+                            child: Text(type.displayName),
+                          );
+                        }).toList(),
+                    onChanged: (RoutineType? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          _selectedType = newValue;
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: Spacing.xl4),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Exercises',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: Spacing.sm),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      itemCount: _exercises.length,
-                      itemBuilder: (context, exerciseIndex) {
-                        final exercise = _exercises[exerciseIndex];
-                        return ExerciseItem(
-                          key: ValueKey(exercise.uuid),
-                          exercise: exercise,
-                          exerciseIndex: exerciseIndex,
-                          onRemove: () => _removeExercise(exercise.uuid),
-                          isRemovable: _exercises.length > 1,
-                          startingPositions:
-                              StartingPosition.values
-                                  .map((pos) => pos.displayName)
-                                  .toList(),
-                        );
-                      },
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: _addExercise,
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add Exercise'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: Spacing.xl),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _saveRoutine,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(Spacing.md),
-                    ),
-                    child: const Text('Save Changes'),
+                      const SizedBox(height: Spacing.sm),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        itemCount: _exercises.length,
+                        itemBuilder: (context, exerciseIndex) {
+                          final exercise = _exercises[exerciseIndex];
+                          return ExerciseItem(
+                            key: ValueKey(exercise.uuid),
+                            exercise: exercise,
+                            exerciseIndex: exerciseIndex,
+                            onRemove: () => _removeExercise(exercise.uuid),
+                            isRemovable: _exercises.length > 1,
+                            startingPositions:
+                                StartingPosition.values
+                                    .map((pos) => pos.displayName)
+                                    .toList(),
+                          );
+                        },
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: _addExercise,
+                        icon: const Icon(Icons.add),
+                        label: const Text('Add Exercise'),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: Spacing.xl),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _saveRoutine,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(Spacing.md),
+                      ),
+                      child: const Text('Save Changes'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
