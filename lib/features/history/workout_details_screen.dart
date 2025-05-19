@@ -75,7 +75,12 @@ class WorkoutDetailsView extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: workout.routineName, showBack: true),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(Spacing.body),
+        padding: const EdgeInsets.only(
+          left: Spacing.body,
+          right: Spacing.body,
+          top: Spacing.body,
+          bottom: Spacing.xl5,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -85,7 +90,7 @@ class WorkoutDetailsView extends StatelessWidget {
               repCount: workout.reps.length,
               totalTime: _formatTime(totalTime),
             ),
-            const SizedBox(height: Spacing.xl),
+            const SizedBox(height: Spacing.md),
             ...workout.reps.map((rep) => ExerciseRepCard(rep: rep)),
           ],
         ),
