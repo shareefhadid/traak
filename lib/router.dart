@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:traak/features/track/track_screen.dart';
 import 'package:traak/features/track/new_routine_screen.dart';
 import 'package:traak/features/track/edit_routine_screen.dart';
+import 'package:traak/features/track/workout_screen.dart';
 
 final router = GoRouter(
   routes: [
@@ -18,6 +19,13 @@ final router = GoRouter(
           builder: (context, state) {
             final routineId = int.parse(state.pathParameters['id']!);
             return EditRoutineScreen(routineId: routineId);
+          },
+        ),
+        GoRoute(
+          path: 'workout/:id',
+          builder: (context, state) {
+            final routineId = int.parse(state.pathParameters['id']!);
+            return WorkoutScreen(routineId: routineId);
           },
         ),
       ],

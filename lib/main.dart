@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:traak/app.dart';
 import 'package:traak/features/track/repositories/routine_repository.dart';
+import 'package:traak/features/track/repositories/workout_repository.dart';
 import 'package:traak/shared/services/isar_service.dart';
 
 void main() async {
@@ -10,8 +11,8 @@ void main() async {
   // Initialize the database
   await IsarService.initializeDatabase();
 
-  // Initialize repository
   RoutineRepository.initialize();
+  WorkoutRepository.initialize();
 
   // Run the app
   runApp(const TraakApp());

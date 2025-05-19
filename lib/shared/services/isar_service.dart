@@ -1,6 +1,7 @@
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:traak/features/track/models/routine.dart';
+import 'package:traak/features/track/models/workout.dart';
 import 'package:traak/features/track/types/distance.dart';
 
 class IsarService {
@@ -35,7 +36,10 @@ class IsarService {
         isar =
             Isar.getInstance()!; // Non-null assertion since we checked if it exists
       } else {
-        isar = await Isar.open([RoutineSchema], directory: dir.path);
+        isar = await Isar.open([
+          RoutineSchema,
+          WorkoutSchema,
+        ], directory: dir.path,);
       }
 
       _instance = IsarService._(isar);
@@ -92,5 +96,62 @@ class IsarService {
     return _db.routines.where().sortByCreatedAtDesc().watch(
       fireImmediately: true,
     );
+  }
+
+  // Workout CRUD operations
+  Future<List<Workout>> getAllWorkouts() async {
+    return await _db.workouts.where().sortByCreatedAtDesc().findAll();
+  }
+
+  Future<List<Workout>> getWorkoutsByRoutineId(int routineId) async {
+    return await _db.workouts
+        .where()
+        .routineIdIndexEqualTo(routineId)
+        .sortByCreatedAtDesc()
+        .findAll();
+  }
+
+  Future<Workout?> getWorkoutById(int id) async {
+    return await _db.workouts.get(id);
+  }
+
+  Future<int> saveWorkout(Workout workout) async {
+    if (workout.routineName.isEmpty) {
+      throw Exception('Workout routine name cannot be empty');
+    }
+
+    if (workout.routineId <= 0) {
+      throw Exception('Workout must reference a valid routine ID');
+    }
+
+    if (workout.reps.isEmpty) {
+      throw Exception('Workout must have at least one rep');
+    }
+
+    int id = 0;
+    await _db.writeTxn(() async {
+      id = await _db.workouts.put(workout);
+    });
+    return id;
+  }
+
+  Future<bool> deleteWorkout(int id) async {
+    return await _db.writeTxn(() async {
+      return await _db.workouts.delete(id);
+    });
+  }
+
+  Stream<List<Workout>> watchAllWorkouts() {
+    return _db.workouts.where().sortByCreatedAtDesc().watch(
+      fireImmediately: true,
+    );
+  }
+
+  Stream<List<Workout>> watchWorkoutsByRoutineId(int routineId) {
+    return _db.workouts
+        .where()
+        .routineIdIndexEqualTo(routineId)
+        .sortByCreatedAtDesc()
+        .watch(fireImmediately: true);
   }
 }

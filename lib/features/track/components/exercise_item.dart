@@ -15,6 +15,7 @@ class ExerciseItem extends StatefulWidget {
     required this.isRemovable,
     required this.startingPositions,
   });
+
   final Exercise exercise;
   final int exerciseIndex;
   final VoidCallback onRemove;
