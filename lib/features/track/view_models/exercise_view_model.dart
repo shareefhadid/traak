@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traak/features/track/models/exercise.dart';
+import 'package:traak/features/track/types/distance.dart';
 
 /// ViewModel for Exercise that handles UI-related logic
 class ExerciseViewModel {
@@ -7,7 +8,7 @@ class ExerciseViewModel {
     // Initialize controllers with current model values
     nameController = TextEditingController(text: exercise.name);
     distanceController = TextEditingController(
-      text: exercise.distance.toString(),
+      text: exercise.distance.meters.toString(),
     );
     repCountController = TextEditingController(
       text: exercise.repCount.toString(),
@@ -26,6 +27,9 @@ class ExerciseViewModel {
   /// Controller for the rep count field
   late final TextEditingController repCountController;
 
+  /// List of available distances for dropdown
+  List<SprintDistance> get availableDistances => SprintDistance.values;
+
   /// Updates the exercise model with current controller values
   void save() {
     // Update exercise name
@@ -39,7 +43,9 @@ class ExerciseViewModel {
     if (distanceValue <= 0) {
       throw Exception('Exercise distance must be greater than 0');
     }
-    exercise.distance = distanceValue;
+
+    // Find the closest standard distance
+    exercise.distance = SprintDistanceExtension.fromMeters(distanceValue);
 
     // Parse rep count
     final repValue = int.tryParse(repCountController.text);
@@ -58,6 +64,12 @@ class ExerciseViewModel {
       exercise.repCount = count;
       repCountController.text = count.toString();
     }
+  }
+
+  /// Updates the distance and the controller
+  void updateDistance(SprintDistance distance) {
+    exercise.distance = distance;
+    distanceController.text = distance.meters.toString();
   }
 
   /// Clean up resources

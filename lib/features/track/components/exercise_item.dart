@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:traak/constants/spacing.dart';
 import 'package:traak/features/track/models/exercise.dart';
 import 'package:traak/features/track/types/starting_position.dart';
+import 'package:traak/features/track/types/distance.dart';
 import 'package:traak/features/track/view_models/exercise_view_model.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
 
@@ -94,31 +95,22 @@ class _ExerciseItemState extends State<ExerciseItem> {
                 return null;
               },
             ),
-            TextFormField(
-              controller: _viewModel.distanceController,
-              decoration: const InputDecoration(
-                labelText: 'Distance (meters)',
-                hintText: 'Enter distance in meters',
-                suffixText: 'm',
-              ),
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _viewModel.save();
-              },
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter a distance';
+            DropdownButtonFormField<SprintDistance>(
+              value: widget.exercise.distance,
+              decoration: const InputDecoration(labelText: 'Distance'),
+              items:
+                  _viewModel.availableDistances.map((SprintDistance distance) {
+                    return DropdownMenuItem<SprintDistance>(
+                      value: distance,
+                      child: Text(distance.displayName),
+                    );
+                  }).toList(),
+              onChanged: (SprintDistance? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    _viewModel.updateDistance(newValue);
+                  });
                 }
-                if (int.tryParse(value) == null) {
-                  return 'Please enter a valid number';
-                }
-                if (int.parse(value) <= 0) {
-                  return 'Distance must be greater than 0';
-                }
-                return null;
-              },
-              onEditingComplete: () {
-                _viewModel.save();
               },
             ),
             Column(

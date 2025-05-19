@@ -1,6 +1,7 @@
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:traak/features/track/models/routine.dart';
+import 'package:traak/features/track/types/distance.dart';
 
 class IsarService {
   // Private constructor that takes an initialized Isar instance
@@ -65,7 +66,7 @@ class IsarService {
       if (exercise.name.isEmpty) {
         throw Exception('Exercise name cannot be empty');
       }
-      if (exercise.distance <= 0) {
+      if (exercise.distance.meters <= 0) {
         throw Exception('Exercise distance must be greater than 0');
       }
       if (exercise.repCount <= 0) {

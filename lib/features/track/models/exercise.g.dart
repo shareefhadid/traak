@@ -16,31 +16,37 @@ const ExerciseSchema = Schema(
     r'distance': PropertySchema(
       id: 0,
       name: r'distance',
+      type: IsarType.string,
+      enumMap: _ExercisedistanceEnumValueMap,
+    ),
+    r'distanceInMeters': PropertySchema(
+      id: 1,
+      name: r'distanceInMeters',
       type: IsarType.long,
     ),
     r'effort': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'effort',
       type: IsarType.double,
     ),
     r'name': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'name',
       type: IsarType.string,
     ),
     r'repCount': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'repCount',
       type: IsarType.long,
     ),
     r'startingPosition': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'startingPosition',
       type: IsarType.string,
       enumMap: _ExercisestartingPositionEnumValueMap,
     ),
     r'uuid': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'uuid',
       type: IsarType.string,
     )
@@ -57,6 +63,7 @@ int _exerciseEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.distance.name.length * 3;
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.startingPosition.name.length * 3;
   bytesCount += 3 + object.uuid.length * 3;
@@ -69,12 +76,13 @@ void _exerciseSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.distance);
-  writer.writeDouble(offsets[1], object.effort);
-  writer.writeString(offsets[2], object.name);
-  writer.writeLong(offsets[3], object.repCount);
-  writer.writeString(offsets[4], object.startingPosition.name);
-  writer.writeString(offsets[5], object.uuid);
+  writer.writeString(offsets[0], object.distance.name);
+  writer.writeLong(offsets[1], object.distanceInMeters);
+  writer.writeDouble(offsets[2], object.effort);
+  writer.writeString(offsets[3], object.name);
+  writer.writeLong(offsets[4], object.repCount);
+  writer.writeString(offsets[5], object.startingPosition.name);
+  writer.writeString(offsets[6], object.uuid);
 }
 
 Exercise _exerciseDeserialize(
@@ -84,14 +92,16 @@ Exercise _exerciseDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Exercise();
-  object.distance = reader.readLong(offsets[0]);
-  object.effort = reader.readDouble(offsets[1]);
-  object.name = reader.readString(offsets[2]);
-  object.repCount = reader.readLong(offsets[3]);
+  object.distance =
+      _ExercisedistanceValueEnumMap[reader.readStringOrNull(offsets[0])] ??
+          SprintDistance.m30;
+  object.effort = reader.readDouble(offsets[2]);
+  object.name = reader.readString(offsets[3]);
+  object.repCount = reader.readLong(offsets[4]);
   object.startingPosition = _ExercisestartingPositionValueEnumMap[
-          reader.readStringOrNull(offsets[4])] ??
+          reader.readStringOrNull(offsets[5])] ??
       StartingPosition.twoPoint;
-  object.uuid = reader.readString(offsets[5]);
+  object.uuid = reader.readString(offsets[6]);
   return object;
 }
 
@@ -103,24 +113,51 @@ P _exerciseDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLong(offset)) as P;
+      return (_ExercisedistanceValueEnumMap[reader.readStringOrNull(offset)] ??
+          SprintDistance.m30) as P;
     case 1:
-      return (reader.readDouble(offset)) as P;
-    case 2:
-      return (reader.readString(offset)) as P;
-    case 3:
       return (reader.readLong(offset)) as P;
+    case 2:
+      return (reader.readDouble(offset)) as P;
+    case 3:
+      return (reader.readString(offset)) as P;
     case 4:
+      return (reader.readLong(offset)) as P;
+    case 5:
       return (_ExercisestartingPositionValueEnumMap[
               reader.readStringOrNull(offset)] ??
           StartingPosition.twoPoint) as P;
-    case 5:
+    case 6:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
+const _ExercisedistanceEnumValueMap = {
+  r'm30': r'm30',
+  r'm40': r'm40',
+  r'm60': r'm60',
+  r'm100': r'm100',
+  r'm150': r'm150',
+  r'm200': r'm200',
+  r'm300': r'm300',
+  r'm400': r'm400',
+  r'm500': r'm500',
+  r'm600': r'm600',
+};
+const _ExercisedistanceValueEnumMap = {
+  r'm30': SprintDistance.m30,
+  r'm40': SprintDistance.m40,
+  r'm60': SprintDistance.m60,
+  r'm100': SprintDistance.m100,
+  r'm150': SprintDistance.m150,
+  r'm200': SprintDistance.m200,
+  r'm300': SprintDistance.m300,
+  r'm400': SprintDistance.m400,
+  r'm500': SprintDistance.m500,
+  r'm600': SprintDistance.m600,
+};
 const _ExercisestartingPositionEnumValueMap = {
   r'twoPoint': r'twoPoint',
   r'threePoint': r'threePoint',
@@ -141,42 +178,175 @@ const _ExercisestartingPositionValueEnumMap = {
 extension ExerciseQueryFilter
     on QueryBuilder<Exercise, Exercise, QFilterCondition> {
   QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceEqualTo(
-      int value) {
+    SprintDistance value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'distance',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceGreaterThan(
-    int value, {
+    SprintDistance value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'distance',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceLessThan(
-    int value, {
+    SprintDistance value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'distance',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceBetween(
+    SprintDistance lower,
+    SprintDistance upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'distance',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'distance',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'distance',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'distance',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'distance',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'distance',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition> distanceIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'distance',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition>
+      distanceInMetersEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'distanceInMeters',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition>
+      distanceInMetersGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'distanceInMeters',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition>
+      distanceInMetersLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'distanceInMeters',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Exercise, Exercise, QAfterFilterCondition>
+      distanceInMetersBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -184,7 +354,7 @@ extension ExerciseQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'distance',
+        property: r'distanceInMeters',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
