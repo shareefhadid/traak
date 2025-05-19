@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:traak/constants/spacing.dart';
 import 'package:traak/features/track/components/track_screen_empty_state.dart';
-import 'package:traak/features/track/models/routine.dart';
-import 'package:traak/features/track/repositories/routine_repository.dart';
+import 'package:traak/shared/models/routine.dart';
+import 'package:traak/shared/repositories/routine_repository.dart';
 import 'package:traak/features/track/types/routine_type.dart';
 import 'package:traak/shared/components/custom_app_bar.dart';
 

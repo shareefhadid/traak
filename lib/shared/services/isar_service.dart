@@ -1,7 +1,7 @@
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:traak/features/track/models/routine.dart';
-import 'package:traak/features/track/models/workout.dart';
+import 'package:traak/shared/models/routine.dart';
+import 'package:traak/shared/models/workout.dart';
 import 'package:traak/features/track/types/distance.dart';
 
 class IsarService {

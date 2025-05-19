@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:traak/features/track/models/exercise.dart';
+import 'package:traak/shared/models/exercise.dart';
 import 'package:traak/features/track/types/distance.dart';
 
 /// ViewModel for Exercise that handles UI-related logic

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:traak/constants/spacing.dart';
 import 'package:traak/features/track/components/labeled_value_row.dart';
-import 'package:traak/features/track/models/exercise.dart';
+import 'package:traak/shared/models/exercise.dart';
 import 'package:traak/features/track/types/distance.dart';
 import 'package:traak/features/track/types/starting_position.dart';
 

@@ -1,4 +1,4 @@
-import 'package:traak/features/track/models/routine.dart';
+import 'package:traak/shared/models/routine.dart';
 import 'package:traak/shared/services/isar_service.dart';
 
 class RoutineRepository {

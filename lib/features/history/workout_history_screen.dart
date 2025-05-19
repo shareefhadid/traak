@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:traak/features/track/models/workout.dart';
-import 'package:traak/features/track/repositories/workout_repository.dart';
+import 'package:traak/shared/models/workout.dart';
+import 'package:traak/shared/repositories/workout_repository.dart';
 import 'package:traak/shared/components/custom_app_bar.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
 import 'package:traak/constants/spacing.dart';

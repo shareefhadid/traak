@@ -3,8 +3,8 @@ import 'package:traak/features/track/track_screen.dart';
 import 'package:traak/features/track/new_routine_screen.dart';
 import 'package:traak/features/track/edit_routine_screen.dart';
 import 'package:traak/features/track/workout_screen.dart';
-import 'package:traak/features/track/workout_history_screen.dart';
-import 'package:traak/features/track/shell_scaffold.dart';
+import 'package:traak/features/history/workout_history_screen.dart';
+import 'package:traak/shared/components/shell_scaffold.dart';
 import 'package:flutter/material.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();

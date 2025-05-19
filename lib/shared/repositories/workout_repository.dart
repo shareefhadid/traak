@@ -1,6 +1,6 @@
-import 'package:traak/features/track/models/exercise.dart';
-import 'package:traak/features/track/models/routine.dart';
-import 'package:traak/features/track/models/workout.dart';
+import 'package:traak/shared/models/exercise.dart';
+import 'package:traak/shared/models/routine.dart';
+import 'package:traak/shared/models/workout.dart';
 import 'package:traak/shared/services/isar_service.dart';
 
 class WorkoutRepository {

@@ -1,5 +1,5 @@
 import 'package:isar/isar.dart';
-import 'package:traak/features/track/models/exercise.dart';
+import 'package:traak/shared/models/exercise.dart';
 import 'package:traak/features/track/types/routine_type.dart';
 
 part 'routine.g.dart';
