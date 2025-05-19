@@ -124,7 +124,12 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
     }
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Edit Routine'),
+      appBar: CustomAppBar(
+        title: 'Edit Routine',
+        actions: [
+          IconButton(icon: const Icon(Icons.save), onPressed: _saveRoutine),
+        ],
+      ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(

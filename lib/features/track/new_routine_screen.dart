@@ -76,7 +76,12 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'New Routine'),
+      appBar: CustomAppBar(
+        title: 'New Routine',
+        actions: [
+          IconButton(icon: const Icon(Icons.save), onPressed: _saveRoutine),
+        ],
+      ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
