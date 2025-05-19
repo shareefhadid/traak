@@ -36,7 +36,7 @@ class ShellScaffold extends StatelessWidget {
         items: const [
           BottomNavigationBarItem(
             icon: Padding(
-              padding: EdgeInsets.only(top: Spacing.md),
+              padding: EdgeInsets.only(top: Spacing.sm, bottom: Spacing.xs),
               child: Icon(Icons.fitness_center),
             ),
             label: 'Track',
@@ -44,7 +44,7 @@ class ShellScaffold extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Padding(
-              padding: EdgeInsets.only(top: Spacing.md),
+              padding: EdgeInsets.only(top: Spacing.sm, bottom: Spacing.xs),
               child: Icon(Icons.history),
             ),
             label: 'History',

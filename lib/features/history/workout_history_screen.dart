@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traak/shared/components/custom_app_bar.dart';
+import 'package:traak/shared/constants/spacing.dart';
 import 'package:traak/shared/models/workout.dart';
 import 'package:traak/shared/repositories/workout_repository.dart';
 import 'package:traak/features/history/components/workout_card.dart';
@@ -49,6 +50,12 @@ class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
 
           return ListView.builder(
             itemCount: workouts.length,
+            padding: const EdgeInsets.only(
+              top: Spacing.lg,
+              left: Spacing.body,
+              right: Spacing.body,
+              bottom: Spacing.body,
+            ),
             itemBuilder: (context, index) {
               final workout = workouts[index];
               return WorkoutCard(
