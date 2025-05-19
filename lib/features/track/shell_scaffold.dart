@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:traak/constants/spacing.dart';
 
 class ShellScaffold extends StatelessWidget {
   const ShellScaffold({
@@ -16,6 +17,11 @@ class ShellScaffold extends StatelessWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: ColorScheme.of(context).surfaceContainerLow,
+        iconSize: 20.0,
+        selectedFontSize: 12.0,
+        unselectedFontSize: 12.0,
+        selectedItemColor: ColorScheme.of(context).primary,
         currentIndex: currentIndex,
         onTap: (index) {
           switch (index) {
@@ -29,10 +35,21 @@ class ShellScaffold extends StatelessWidget {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
+            icon: Padding(
+              padding: EdgeInsets.only(top: Spacing.md),
+              child: Icon(Icons.fitness_center),
+            ),
             label: 'Track',
+            tooltip: 'Track your training',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.only(top: Spacing.md),
+              child: Icon(Icons.history),
+            ),
+            label: 'History',
+            tooltip: 'View past workouts',
+          ),
         ],
       ),
     );

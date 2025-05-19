@@ -45,7 +45,6 @@ final router = GoRouter(
             ),
           ],
         ),
-
         GoRoute(
           path: '/history',
           pageBuilder: (context, state) {
