@@ -3,11 +3,27 @@ import 'package:intl/intl.dart';
 import 'package:traak/shared/constants/spacing.dart';
 import 'package:traak/shared/models/workout.dart';
 import 'package:traak/features/history/components/workout_info_item.dart';
+import 'package:traak/shared/components/confirmation_dialog.dart';
 
 class WorkoutCard extends StatelessWidget {
+  const WorkoutCard({super.key, required this.workout, required this.onDelete});
 
-  const WorkoutCard({super.key, required this.workout});
   final Workout workout;
+  final Future<void> Function(Workout workout) onDelete;
+
+  Future<void> _handleDelete(BuildContext context) async {
+    final confirmed = await ConfirmationDialog.show(
+      context: context,
+      title: 'Delete Workout',
+      message: 'Are you sure you want to delete this workout?',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+    );
+
+    if (confirmed == true) {
+      await onDelete(workout);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +57,27 @@ class WorkoutCard extends StatelessWidget {
                     style: TextTheme.of(context).titleMedium,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
+                PopupMenuButton<String>(
+                  useRootNavigator: true,
                   icon: const Icon(Icons.more_horiz),
+                  onSelected: (value) {
+                    if (value == 'delete') {
+                      _handleDelete(context);
+                    }
+                  },
+                  itemBuilder:
+                      (context) => [
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete_outline, size: 20),
+                              SizedBox(width: Spacing.sm),
+                              Text('Delete'),
+                            ],
+                          ),
+                        ),
+                      ],
                 ),
               ],
             ),

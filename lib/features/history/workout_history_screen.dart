@@ -14,6 +14,18 @@ class WorkoutHistoryScreen extends StatefulWidget {
 class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
   final _workoutRepo = WorkoutRepository.instance;
 
+  Future<void> _handleDeleteWorkout(Workout workout) async {
+    try {
+      await _workoutRepo.deleteWorkout(workout.id);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to delete workout: $e')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +51,10 @@ class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
             itemCount: workouts.length,
             itemBuilder: (context, index) {
               final workout = workouts[index];
-              return WorkoutCard(workout: workout);
+              return WorkoutCard(
+                workout: workout,
+                onDelete: _handleDeleteWorkout,
+              );
             },
           );
         },
