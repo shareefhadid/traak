@@ -25,7 +25,7 @@ class TrackScreenEmptyState extends StatelessWidget {
             ),
             const SizedBox(height: Spacing.md),
             ElevatedButton(
-              onPressed: () => context.push('/new-routine'),
+              onPressed: () => context.goNamed('new-routine'),
               child: const Text('Add routine'),
             ),
           ],

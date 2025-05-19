@@ -26,10 +26,10 @@ class ShellScaffold extends StatelessWidget {
         onTap: (index) {
           switch (index) {
             case 0:
-              context.go('/');
+              context.goNamed('track');
               break;
             case 1:
-              context.go('/history');
+              context.goNamed('history');
               break;
           }
         },

@@ -59,96 +59,96 @@ class _TrackScreenState extends State<TrackScreen> {
         return Scaffold(
           appBar: const CustomAppBar(title: 'Track'),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => context.push('/new-routine'),
+            onPressed: () => context.goNamed('new-routine'),
             child: const Icon(Icons.add),
           ),
-          body: RefreshIndicator(
-            onRefresh: () async {
-              // Manual refresh still available via pull-to-refresh
-              await _routineRepository.getAllRoutines();
-            },
-            child: ListView.builder(
-              padding: const EdgeInsets.all(Spacing.body),
-              itemCount: routines.length,
-              itemBuilder: (context, index) {
-                final routine = routines[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: Spacing.md),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: Text(routine.name),
-                        subtitle: Text(
-                          '${routine.type.displayName} • ${routine.exerciseCount} exercises',
-                        ),
-                        trailing: PopupMenuButton<String>(
-                          icon: const Icon(Icons.more_horiz),
-                          onSelected: (value) {
-                            if (value == 'edit') {
-                              context.push('/edit-routine/${routine.id}');
-                            } else if (value == 'delete') {
-                              _deleteRoutine(routine.id);
-                            }
-                          },
-                          itemBuilder:
-                              (context) => [
-                                const PopupMenuItem(
-                                  value: 'edit',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.edit, size: 20),
-                                      SizedBox(width: 8),
-                                      Text('Edit'),
-                                    ],
-                                  ),
-                                ),
-                                const PopupMenuItem(
-                                  value: 'delete',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.delete, size: 20),
-                                      SizedBox(width: 8),
-                                      Text('Delete'),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                        ),
+          body: ListView.builder(
+            padding: const EdgeInsets.all(Spacing.body),
+            itemCount: routines.length,
+            itemBuilder: (context, index) {
+              final routine = routines[index];
+              return Card(
+                margin: const EdgeInsets.only(bottom: Spacing.md),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(routine.name),
+                      subtitle: Text(
+                        '${routine.type.displayName} • ${routine.exerciseCount} exercises',
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: Spacing.md,
-                          right: Spacing.md,
-                          bottom: Spacing.md,
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed:
-                                    () => {
-                                      context.push('/workout/${routine.id}'),
-                                    },
-                                icon: const Icon(Icons.play_arrow),
-                                label: const Text('Start Workout'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      ColorScheme.of(context).primaryContainer,
-                                  foregroundColor:
-                                      ColorScheme.of(
-                                        context,
-                                      ).onPrimaryContainer,
+                      trailing: PopupMenuButton<String>(
+                        icon: const Icon(Icons.more_horiz),
+                        onSelected: (value) {
+                          if (value == 'edit') {
+                            context.goNamed(
+                              'edit-routine',
+                              pathParameters: {'id': routine.id.toString()},
+                            );
+                          } else if (value == 'delete') {
+                            _deleteRoutine(routine.id);
+                          }
+                        },
+                        itemBuilder:
+                            (context) => [
+                              const PopupMenuItem(
+                                value: 'edit',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.edit, size: 20),
+                                    SizedBox(width: 8),
+                                    Text('Edit'),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                              const PopupMenuItem(
+                                value: 'delete',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.delete, size: 20),
+                                    SizedBox(width: 8),
+                                    Text('Delete'),
+                                  ],
+                                ),
+                              ),
+                            ],
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: Spacing.md,
+                        right: Spacing.md,
+                        bottom: Spacing.md,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed:
+                                  () => {
+                                    context.goNamed(
+                                      'workout',
+                                      pathParameters: {
+                                        'id': routine.id.toString(),
+                                      },
+                                    ),
+                                  },
+                              icon: const Icon(Icons.play_arrow),
+                              label: const Text('Start Workout'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    ColorScheme.of(context).primaryContainer,
+                                foregroundColor:
+                                    ColorScheme.of(context).onPrimaryContainer,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         );
       },

@@ -5,11 +5,17 @@ import 'package:traak/features/track/edit_routine_screen.dart';
 import 'package:traak/features/track/workout_screen.dart';
 import 'package:traak/features/track/workout_history_screen.dart';
 import 'package:traak/features/track/shell_scaffold.dart';
+import 'package:flutter/material.dart';
+
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
   initialLocation: '/',
+  navigatorKey: _rootNavigatorKey,
   routes: [
     ShellRoute(
+      navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
         int currentIndex = 0;
         if (state.matchedLocation.startsWith('/history')) {
@@ -21,16 +27,21 @@ final router = GoRouter(
       routes: [
         GoRoute(
           path: '/',
+          name: 'track',
           pageBuilder: (context, state) {
             return const NoTransitionPage(child: TrackScreen());
           },
           routes: [
             GoRoute(
               path: 'new-routine',
+              name: 'new-routine',
+              parentNavigatorKey: _rootNavigatorKey,
               builder: (context, state) => const NewRoutineScreen(),
             ),
             GoRoute(
               path: 'edit-routine/:id',
+              name: 'edit-routine',
+              parentNavigatorKey: _rootNavigatorKey,
               builder: (context, state) {
                 final routineId = int.parse(state.pathParameters['id']!);
                 return EditRoutineScreen(routineId: routineId);
@@ -38,6 +49,8 @@ final router = GoRouter(
             ),
             GoRoute(
               path: 'workout/:id',
+              name: 'workout',
+              parentNavigatorKey: _rootNavigatorKey,
               builder: (context, state) {
                 final routineId = int.parse(state.pathParameters['id']!);
                 return WorkoutScreen(routineId: routineId);
@@ -47,6 +60,7 @@ final router = GoRouter(
         ),
         GoRoute(
           path: '/history',
+          name: 'history',
           pageBuilder: (context, state) {
             return const NoTransitionPage(child: WorkoutHistoryScreen());
           },
