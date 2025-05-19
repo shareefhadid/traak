@@ -77,6 +77,7 @@ class _TrackScreenState extends State<TrackScreen> {
                         '${routine.type.displayName} • ${routine.exerciseCount} exercises',
                       ),
                       trailing: PopupMenuButton<String>(
+                        useRootNavigator: true,
                         icon: const Icon(Icons.more_horiz),
                         onSelected: (value) {
                           if (value == 'edit') {

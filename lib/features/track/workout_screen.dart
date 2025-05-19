@@ -342,6 +342,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         onBack: _cancelWorkout,
         actions: [
           PopupMenuButton<String>(
+            useRootNavigator: true,
             onSelected: (value) {
               switch (value) {
                 case 'save':
