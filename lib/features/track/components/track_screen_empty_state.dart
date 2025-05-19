@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:traak/constants/spacing.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
+import 'package:traak/shared/components/custom_app_bar.dart';
 
 class TrackScreenEmptyState extends StatelessWidget {
   const TrackScreenEmptyState({super.key});
@@ -9,6 +10,7 @@ class TrackScreenEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomAppBar(title: 'Track'),
       body: AppBodyPadding(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -23,7 +25,7 @@ class TrackScreenEmptyState extends StatelessWidget {
             ),
             const SizedBox(height: Spacing.md),
             ElevatedButton(
-              onPressed: () => context.go('/new-routine'),
+              onPressed: () => context.push('/new-routine'),
               child: const Text('Add routine'),
             ),
           ],

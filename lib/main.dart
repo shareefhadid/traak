@@ -5,15 +5,12 @@ import 'package:traak/features/track/repositories/workout_repository.dart';
 import 'package:traak/shared/services/isar_service.dart';
 
 void main() async {
-  // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize the database
   await IsarService.initializeDatabase();
 
   RoutineRepository.initialize();
   WorkoutRepository.initialize();
 
-  // Run the app
   runApp(const TraakApp());
 }

@@ -1,11 +1,9 @@
 # TODO
 
-- bundle package and send to douglas
-
 ## Tracking
 
-- edit routine
-- start workout
+- skip set
+- adjust distance, starting postion, effort etc
 
 ## History
 

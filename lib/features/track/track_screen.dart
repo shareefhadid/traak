@@ -32,6 +32,7 @@ class _TrackScreenState extends State<TrackScreen> {
         // Show loading state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
+            appBar: CustomAppBar(title: 'Track'),
             body: Center(child: CircularProgressIndicator()),
           );
         }

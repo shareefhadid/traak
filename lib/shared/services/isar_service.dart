@@ -5,16 +5,12 @@ import 'package:traak/features/track/models/workout.dart';
 import 'package:traak/features/track/types/distance.dart';
 
 class IsarService {
-  // Private constructor that takes an initialized Isar instance
   IsarService._(this._db);
 
-  // The actual database instance
   final Isar _db;
 
-  // Private static instance variable
   static IsarService? _instance;
 
-  // Public getter that returns the instance if it exists
   static IsarService get instance {
     if (_instance == null) {
       throw Exception(
@@ -24,7 +20,6 @@ class IsarService {
     return _instance!;
   }
 
-  // Static initialization method to be called at app startup
   static Future<void> initializeDatabase() async {
     if (_instance != null) return;
 
@@ -39,7 +34,7 @@ class IsarService {
         isar = await Isar.open([
           RoutineSchema,
           WorkoutSchema,
-        ], directory: dir.path,);
+        ], directory: dir.path);
       }
 
       _instance = IsarService._(isar);
@@ -48,7 +43,6 @@ class IsarService {
     }
   }
 
-  // Routines CRUD operations
   Future<List<Routine>> getAllRoutines() async {
     return await _db.routines.where().sortByCreatedAtDesc().findAll();
   }
@@ -91,14 +85,12 @@ class IsarService {
     });
   }
 
-  // Get a stream of routines for reactive UI updates
   Stream<List<Routine>> watchAllRoutines() {
     return _db.routines.where().sortByCreatedAtDesc().watch(
       fireImmediately: true,
     );
   }
 
-  // Workout CRUD operations
   Future<List<Workout>> getAllWorkouts() async {
     return await _db.workouts.where().sortByCreatedAtDesc().findAll();
   }

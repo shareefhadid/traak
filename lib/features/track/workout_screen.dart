@@ -168,7 +168,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     }
   }
 
-  // Method to validate and save the current rep
   bool _validateAndSaveCurrentRep() {
     if (_timeController.text.isEmpty) {
       _showMessage('Please enter a completion time for the current rep');
