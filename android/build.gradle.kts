@@ -21,6 +21,13 @@ subprojects {
                 if (androidExtension.namespace == null) {
                     androidExtension.namespace = project.group.toString()
                 }
+                
+                androidExtension.compileSdkVersion(34)
+                
+                androidExtension.compileOptions {
+                    sourceCompatibility = JavaVersion.VERSION_11
+                    targetCompatibility = JavaVersion.VERSION_11
+                }
             }
         }
     }
