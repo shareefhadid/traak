@@ -1,15 +1,12 @@
 # TODO
 
+- edit rep (adjust distance, starting position, effort etc)
+- add rep
+- delete rep
+
 ## Tracking
 
 - skip set
-- adjust distance, starting postion, effort etc
-
-## History
-
-- empty state
-- edit workout
-- delete workout
 
 ## Insights
 
