@@ -106,33 +106,43 @@ After creating or modifying Isar model classes:
 
 To publish the iOS version to TestFlight for testing:
 
-1. Ensure you have the latest code with all dependencies updated
+1. Update the version and build number in `pubspec.yaml`
+   ```yaml
+   version: 1.0.0+1  # Format is version_number+build_number
+   ```
+
+2. Build the iOS app in release mode
+   ```
+   flutter build ios --release
+   ```
+
+3. Ensure you have the latest code with all dependencies updated
    ```
    flutter pub get
    ```
 
-2. Open the iOS project in Xcode
+4. Open the iOS project in Xcode
    ```
    open ios/Runner.xcworkspace
    ```
 
-3. In Xcode, select **Product** > **Archive** from the top menu
+5. In Xcode, select **Product** > **Archive** from the top menu
    - Make sure you have selected a proper team in the Signing & Capabilities section
    - Ensure the build is set to "Release" not "Debug"
 
-4. Once the archive process completes, the Xcode Organizer window will open
+6. Once the archive process completes, the Xcode Organizer window will open
    - If it doesn't open automatically, go to **Window** > **Organizer**
 
-5. Select the archive you just created and click **Distribute App**
+7. Select the archive you just created and click **Distribute App**
 
-6. Choose **App Store Connect** as the distribution method and click **Next**
+8. Choose **App Store Connect** as the distribution method and click **Next**
 
-7. Select **Upload** to upload the build to App Store Connect and click **Next**
+9. Select **Upload** to upload the build to App Store Connect and click **Next**
 
-8. Choose distribution options (typically the defaults are fine) and continue through the remaining prompts
+10. Choose distribution options (typically the defaults are fine) and continue through the remaining prompts
 
-9. After the upload completes successfully, log in to [App Store Connect](https://appstoreconnect.apple.com/)
+11. After the upload completes successfully, log in to [App Store Connect](https://appstoreconnect.apple.com/)
 
-10. Navigate to your app > TestFlight and wait for the build to finish processing
+12. Navigate to your app > TestFlight and wait for the build to finish processing
     - This typically takes 15-30 minutes
     - Once processed, you can add test users and distribute the build
