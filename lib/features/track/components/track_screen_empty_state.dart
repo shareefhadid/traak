@@ -16,11 +16,11 @@ class TrackScreenEmptyState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Get started', style: Theme.of(context).textTheme.titleLarge),
+            Text('Get started', style: TextTheme.of(context).titleLarge),
             const SizedBox(height: Spacing.sm),
             Text(
               'Create a routine to start tracking your training.',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: TextTheme.of(context).bodyLarge,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Spacing.md),

@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## Theming
+
+- Always use theming from context when accessing colors, text styles, or other theme values.
+- Use static shorthand methods for theme access:
+  - Use `TextTheme.of(context)` instead of `Theme.of(context).textTheme`
+  - Use `ColorScheme.of(context)` instead of `Theme.of(context).colorScheme`
+
+## Component Structure
+
+- When generating a component, place the constructor at the top of the class, before fields or methods.
+- Do not include multiple components in the same file.
+- If a function returns a widget, it should be extracted as a separate widget instead.
+
+## Other Style Rules
+
+- Use `const` wherever possible.
+- Do not hardcode styles (e.g. colors, padding, typography).
+- Avoid deep widget nesting — suggest extracting widgets that exceed 3-4 levels.

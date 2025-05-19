@@ -20,8 +20,8 @@ class LabeledValueRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('$label:', style: Theme.of(context).textTheme.titleMedium),
-          Text(value, style: Theme.of(context).textTheme.bodyLarge),
+          Text('$label:', style: TextTheme.of(context).titleMedium),
+          Text(value, style: TextTheme.of(context).bodyLarge),
         ],
       ),
     );

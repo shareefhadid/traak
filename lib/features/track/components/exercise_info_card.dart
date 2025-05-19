@@ -24,10 +24,7 @@ class ExerciseInfoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              exercise.name,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+            Text(exercise.name, style: TextTheme.of(context).headlineSmall),
             const SizedBox(height: Spacing.md),
             LabeledValueRow(
               label: 'Distance',
