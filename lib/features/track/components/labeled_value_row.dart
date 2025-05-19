@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:traak/constants/spacing.dart';
+import 'package:traak/shared/constants/spacing.dart';
 
 class LabeledValueRow extends StatelessWidget {
   const LabeledValueRow({

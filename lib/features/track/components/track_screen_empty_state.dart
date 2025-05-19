@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:traak/constants/spacing.dart';
+import 'package:traak/shared/constants/spacing.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
 import 'package:traak/shared/components/custom_app_bar.dart';
 

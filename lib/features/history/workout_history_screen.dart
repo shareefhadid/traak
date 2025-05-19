@@ -4,7 +4,7 @@ import 'package:traak/shared/models/workout.dart';
 import 'package:traak/shared/repositories/workout_repository.dart';
 import 'package:traak/shared/components/custom_app_bar.dart';
 import 'package:traak/shared/components/app_body_padding.dart';
-import 'package:traak/constants/spacing.dart';
+import 'package:traak/shared/constants/spacing.dart';
 
 class WorkoutHistoryScreen extends StatefulWidget {
   const WorkoutHistoryScreen({super.key});
