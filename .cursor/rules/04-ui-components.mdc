@@ -1,5 +1,5 @@
 ---
-description: 
+description: When creating a new component, or trying to understand how components are structured
 globs: 
 alwaysApply: false
 ---
@@ -25,5 +25,6 @@ The application uses Flutter's Material Design components and custom widgets.
 
 ## Design Patterns
 - Widgets should be composable and reusable
+- Maximum one widget per file
 - Extract common UI patterns into shared components
 - Follow Flutter's widget hierarchy guidelines for performance

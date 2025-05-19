@@ -1,11 +1,11 @@
 ---
-description: 
+description: Understanding the project structure and identifying entrypoints
 globs: 
 alwaysApply: false
 ---
 # Traak - Project Overview
 
-This is a Flutter application that helps users track routines and activities.
+This is a Flutter application that helps sprinters track workout routines and get insights to help them improve their performance.
 
 ## Main Entry Points
 - [lib/main.dart](mdc:lib/main.dart) - Application entry point that initializes services and launches the app

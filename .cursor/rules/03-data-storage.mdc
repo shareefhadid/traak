@@ -1,5 +1,5 @@
 ---
-description: 
+description: Interacting with the database, storing data, and retrieving data
 globs: 
 alwaysApply: false
 ---
