@@ -13,8 +13,8 @@ alwaysApply: true
 ## Component Structure
 
 - When generating a component, place the constructor at the top of the class, before fields or methods.
-- Do not include multiple components in the same file.
-- If a function returns a widget, it should be extracted as a separate widget instead.
+- DON'T use functions like `_buildWidget()` that return widgets. They should be extracted as separate widget instead.
+- DON'T include multiple widgets in the same file. Extract them into the component directory under the given feature, or under shared/components if they are reusable.
 
 ## Other Style Rules
 

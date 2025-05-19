@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traak/shared/constants/spacing.dart';
-import 'package:traak/features/track/components/labeled_value_row.dart';
+import 'package:traak/shared/components/labeled_value_row.dart';
 import 'package:traak/shared/models/exercise.dart';
 import 'package:traak/features/track/types/distance.dart';
 import 'package:traak/features/track/types/starting_position.dart';
@@ -24,8 +24,8 @@ class ExerciseInfoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(exercise.name, style: TextTheme.of(context).headlineSmall),
-            const SizedBox(height: Spacing.md),
+            Text(exercise.name, style: TextTheme.of(context).titleLarge),
+            const SizedBox(height: Spacing.xl),
             LabeledValueRow(
               label: 'Distance',
               value: exercise.distance.displayName,
